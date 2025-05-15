@@ -9,18 +9,19 @@
 
     <!-- 메뉴 + 검색창 + 로그인 -->
     <nav class="flex items-center gap-4 w-full justify-end">
-      <!-- 메뉴 -->
+      <!-- 나만의 뉴스 -->
       <RouterLink to="/" class="text-sm font-medium hover:underline">
-        나만의 뉴스
+        📰 나만의 뉴스
       </RouterLink>
 
-      <!-- 검색창 -->
+      <!-- 뉴스 검색 -->
       <RouterLink to="/search" class="text-sm font-medium hover:underline">
-        뉴스 검색
+        🔍 뉴스 검색
       </RouterLink>
 
+      <!-- 대시보드 -->
       <RouterLink to="/dashboard" class="text-sm font-medium hover:underline">
-        대시보드
+        📊 대시보드
       </RouterLink>
 
       <!-- 로그인/로그아웃 -->
@@ -30,6 +31,7 @@
     </nav>
   </header>
 </template>
+
 
 <script setup lang="ts">
 import { ref } from "vue";
