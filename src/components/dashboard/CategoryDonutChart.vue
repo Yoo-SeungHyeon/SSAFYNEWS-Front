@@ -37,7 +37,7 @@ const totalCount = computed(() =>
 )
 
 // 도넛 차트 데이터
-const chartData = {
+const chartData = computed(() => ({
   labels: props.data.map(d => d.category),
   datasets: [
     {
@@ -46,7 +46,7 @@ const chartData = {
       borderWidth: 1,
     },
   ],
-}
+}))
 
 // 중앙 텍스트 플러그인
 const centerTextPlugin: Plugin = {

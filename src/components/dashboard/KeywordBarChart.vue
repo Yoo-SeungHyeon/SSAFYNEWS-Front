@@ -1,6 +1,5 @@
-<!-- src/components/dashboard/KeywordBarChart.vue -->
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -17,24 +16,24 @@ ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement,
 
 interface KeywordData {
   keyword: string
-  frequency: number
+  count: number
 }
 
 const props = defineProps<{
   data: KeywordData[]
 }>()
 
-const chartData = {
+const chartData = computed(() => ({
   labels: props.data.map(d => d.keyword),
   datasets: [
     {
       label: '등장 빈도',
-      data: props.data.map(d => d.frequency),
+      data: props.data.map(d => d.count),
       backgroundColor: '#4F46E5',
       borderRadius: 4,
     },
   ],
-}
+}))
 
 const chartOptions = {
   responsive: true,
@@ -53,6 +52,7 @@ const chartOptions = {
       },
     },
     y: {
+      beginAtZero: true,
       ticks: {
         stepSize: 1,
         color: '#6B7280',

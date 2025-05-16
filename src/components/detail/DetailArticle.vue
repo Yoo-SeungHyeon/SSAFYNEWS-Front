@@ -1,42 +1,86 @@
-<!-- src/components/detail/DetailArticle.vue -->
 <script setup lang="ts">
-import { defineProps, ref, onMounted } from 'vue'
+import { defineProps, ref, onMounted, watch, computed } from 'vue'
+import axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
 
 interface ArticleDetail {
   id: number
   title: string
-  content: string
+  full_text: string
   category: string
-  created_at: string
-  likes: number
+  updated: string
+  like_count: number
+  is_liked_by_me: boolean
+  keywords?: string
 }
 
-const props = defineProps<{
-  articleId: string | number
-}>()
-
+const props = defineProps<{ articleId: string | number }>()
+const authStore = useAuthStore()
 const article = ref<ArticleDetail | null>(null)
 const liked = ref(false)
 
-onMounted(() => {
-  // ✅ 실제 API로 교체 가능
-  article.value = {
-    id: Number(props.articleId),
-    title: `AI 기술로 변화하는 세상`,
-    content:
-      `AI 기술은 의료, 금융, 교육 등 다양한 분야에서 혁신을 이끌고 있습니다.\n\n이 기사에서는 그 구체적인 사례들을 살펴봅니다.`,
-    category: 'IT_과학',
-    created_at: '2025-05-10',
-    likes: 42,
-  }
+const keywordList = computed(() => {
+  if (!article.value?.keywords) return []
+  return article.value.keywords
+    .replace(/[{}"]/g, '')
+    .split(',')
+    .map(k => k.trim())
+    .filter(Boolean)
 })
 
-function toggleLike() {
-  if (!article.value) return
-  liked.value = !liked.value
-  article.value.likes += liked.value ? 1 : -1
+async function fetchArticle() {
+  try {
+    const headers = authStore.token
+      ? {
+          Authorization: `Token ${authStore.token}`,
+          'Content-Type': 'application/json',
+        }
+      : {}
+
+    const res = await axios.get(
+      `http://localhost:8000/api/newsdetail/${props.articleId}/`,
+      { headers }
+    )
+
+    article.value = res.data
+    liked.value = res.data.is_liked_by_me
+  } catch (err) {
+    console.error('기사 불러오기 실패:', err)
+  }
+}
+
+onMounted(fetchArticle)
+watch(() => props.articleId, fetchArticle)
+
+async function toggleLike() {
+  if (!article.value || !article.value.id) {
+    console.warn('article 값이 없거나 ID가 잘못되었습니다.')
+    return
+  }
+
+  if (!authStore.token) {
+    alert('로그인이 필요합니다.')
+    return
+  }
+
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/like/${article.value.id}/`,
+      {},
+      {
+        headers: {
+          Authorization: `Token ${authStore.token}`,
+        },
+      }
+    )
+    liked.value = res.data.liked
+    article.value.like_count = res.data.like_count
+  } catch (err) {
+    console.error('좋아요 토글 실패:', err)
+  }
 }
 </script>
+
 
 <template>
   <div v-if="article">
@@ -47,12 +91,26 @@ function toggleLike() {
       <!-- 메타 정보 -->
       <div class="text-sm text-gray-500">
         <span>🗂 {{ article.category }}</span> ·
-        <span>🕒 {{ article.created_at }}</span>
+        <span>🕒 {{ article.updated.slice(0, 10) }}</span>
+      </div>
+
+      <!-- 키워드 -->
+      <div class="pt-4" v-if="keywordList.length">
+        <h3 class="text-sm font-semibold text-gray-600 mb-1">키워드</h3>
+        <div class="flex flex-wrap gap-2">
+          <span
+            v-for="keyword in keywordList"
+            :key="keyword"
+            class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full"
+          >
+            #{{ keyword }}
+          </span>
+        </div>
       </div>
 
       <!-- 본문 -->
       <div class="text-base text-gray-700 whitespace-pre-line pt-4">
-        {{ article.content }}
+        {{ article.full_text }}
       </div>
 
       <!-- 좋아요 -->
@@ -63,7 +121,7 @@ function toggleLike() {
         >
           <span v-if="liked">❤️</span>
           <span v-else>🤍</span>
-          좋아요 {{ article.likes }}개
+          좋아요 {{ article.like_count }}개
         </button>
       </div>
     </div>

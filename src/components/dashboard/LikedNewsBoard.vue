@@ -1,60 +1,64 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 import { Button } from '@/components/ui/button'
 import ArticleCard from '@/components/ArticleCard.vue'
+import { useAuthStore } from '@/stores/auth'
 
 interface Article {
-  id: number
+  news_id: number
   title: string
   summary: string
+  author?: string
+  updated?: string
+  category?: string
+  link?: string
 }
 
-// 샘플 좋아요 기사 데이터 (더미)
-const likedArticles = ref<Article[]>(
-  Array.from({ length: 12 }, (_, i) => ({
-    id: 100 + i,
-    title: `❤️ 내가 좋아요 누른 뉴스 ${i + 1}`,
-    summary: `이 뉴스는 내가 관심 있게 본 내용입니다. 요약 ${i + 1}`,
-  }))
-)
+const authStore = useAuthStore()
 
-const itemsPerPage = 5
+const articles = ref<Article[]>([])
 const currentPage = ref(1)
+const totalPages = ref(1)
 
-const totalPages = computed(() =>
-  Math.ceil(likedArticles.value.length / itemsPerPage)
-)
+async function fetchLikedArticles(page = 1) {
+  if (!authStore.token) return
 
-const paginatedArticles = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  return likedArticles.value.slice(start, start + itemsPerPage)
-})
+  try {
+    const res = await axios.get(`http://localhost:8000/api/likes/?page=${page}`, {
+      headers: {
+        Authorization: `Token ${authStore.token}`,
+        'Content-Type': 'application/json',
+      },
+    })
 
-// 데이터 변경 시 페이지 초기화
-watch(
-  () => likedArticles.value,
-  () => {
-    currentPage.value = 1
+    articles.value = res.data.articles
+    totalPages.value = res.data.total_pages
+    currentPage.value = res.data.page
+  } catch (err) {
+    console.error('좋아요 기사 목록 불러오기 실패:', err)
   }
-)
+}
 
 function prev() {
-  if (currentPage.value > 1) currentPage.value--
+  if (currentPage.value > 1) fetchLikedArticles(currentPage.value - 1)
 }
 function next() {
-  if (currentPage.value < totalPages.value) currentPage.value++
+  if (currentPage.value < totalPages.value) fetchLikedArticles(currentPage.value + 1)
 }
+
+onMounted(() => fetchLikedArticles())
 </script>
 
 <template>
   <div class="space-y-4">
     <ul class="space-y-2">
-      <li v-for="item in paginatedArticles" :key="item.id">
+      <li v-for="item in articles" :key="item.news_id">
         <ArticleCard :article="item" />
       </li>
     </ul>
 
-    <div class="flex items-center justify-center gap-4 pt-2">
+    <div class="flex items-center justify-center gap-4 pt-2" v-if="totalPages > 1">
       <Button variant="outline" size="sm" @click="prev" :disabled="currentPage === 1">
         이전
       </Button>

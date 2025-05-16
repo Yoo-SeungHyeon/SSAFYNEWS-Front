@@ -29,7 +29,7 @@ const articleId = route.params.id
 
         <!-- 우측 (4/10) -->
         <div class="col-span-12 md:col-span-5 space-y-6">
-          <div class="bg-white border rounded-xl shadow-sm p-6 h-full">
+          <div class="bg-white border rounded-xl shadow-sm p-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">🔎 비슷한 기사</h2>
             <SimilarArticleList :articleId="articleId" />
           </div>

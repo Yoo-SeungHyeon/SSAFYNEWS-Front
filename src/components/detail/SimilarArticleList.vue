@@ -1,37 +1,43 @@
-<!-- src/components/detail/SimilarArticleList.vue -->
 <script setup lang="ts">
-import { defineProps, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 import ArticleCard from '@/components/ArticleCard.vue'
-
-interface Article {
-  id: number
-  title: string
-  summary: string
-}
 
 const props = defineProps<{
   articleId: string | number
 }>()
 
-const similarArticles = ref<Article[]>([])
+interface Article {
+  news_id: number
+  title: string
+  summary: string
+  author: string
+  updated: string
+  category: string
+  link: string
+}
 
-onMounted(() => {
-  // 실제 API 연동 전 더미 추천 데이터 5개 생성
-  const baseId = Number(props.articleId)
-  similarArticles.value = Array.from({ length: 5 }, (_, i) => ({
-    id: baseId + i + 1,
-    title: `비슷한 뉴스 ${i + 1}`,
-    summary: `이 기사와 관련된 추천 뉴스입니다. ${i + 1}번 요약.`,
-  }))
+const articles = ref<Article[]>([])
+
+onMounted(async () => {
+  try {
+    const res = await axios.get(`http://localhost:8000/api/newsdetail/${props.articleId}/similar/`)
+    articles.value = res.data
+  } catch (err) {
+    console.error('관련 기사 불러오기 실패:', err)
+  }
 })
 </script>
 
 <template>
-  <div class="space-y-2">
+  <div class="space-y-3">
     <ArticleCard
-      v-for="article in similarArticles"
-      :key="article.id"
-      :article="article"
+      v-for="item in articles"
+      :key="item.news_id"
+      :article="item"
     />
+    <p v-if="articles.length === 0" class="text-sm text-gray-400">
+      관련 기사가 없습니다.
+    </p>
   </div>
 </template>

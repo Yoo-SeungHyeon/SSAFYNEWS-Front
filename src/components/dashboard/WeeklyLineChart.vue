@@ -1,6 +1,5 @@
-<!-- src/components/dashboard/WeeklyLineChart.vue -->
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -34,7 +33,7 @@ const props = defineProps<{
   data: WeeklyData[]
 }>()
 
-const chartData = {
+const chartData = computed(() => ({
   labels: props.data.map(d => d.date),
   datasets: [
     {
@@ -48,7 +47,7 @@ const chartData = {
       pointBackgroundColor: '#4F46E5',
     },
   ],
-}
+}))
 
 const chartOptions = {
   responsive: true,

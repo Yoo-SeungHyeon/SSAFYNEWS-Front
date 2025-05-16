@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
-import { storeToRefs } from 'pinia'
-import { useNewsStore } from '@/stores/news'
-import FilterBar from "@/components/FilterBar.vue";
-import NewsBoard from "@/components/NewsBoard.vue"
+import { ref, watch, onMounted, computed } from 'vue'
+import axios from 'axios'
+import FilterBar from '@/components/FilterBar.vue'
+import NewsBoard from '@/components/NewsBoard.vue'
 
-/* 장르 및 정렬 옵션 */
 const genres = [
   "전체", "IT_과학", "건강", "경제", "교육", "국제", "라이프스타일",
   "문화", "사건사고", "사회일반", "산업", "스포츠", "여성복지",
@@ -13,14 +11,60 @@ const genres = [
 ]
 const sortOptions = ["최신순", "추천순"]
 
-/* Pinia store */
-const store = useNewsStore()
-const { genre, sort, articles, totalPages } = storeToRefs(store)
+const genre = ref("전체")
+const sort = ref("최신순")
+const articles = ref([])
+const currentPage = ref(0)
+const totalCount = ref(0)
+const pageSize = 10
+const isLoading = ref(false)
 
-/* 초기 데이터 로딩 */
-onMounted(() => {
-  store.load()
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize))
+
+async function loadArticles() {
+  isLoading.value = true
+  try {
+    const response = await axios.get(`http://localhost:8000/api/newspage/${currentPage.value}/`, {
+      params: {
+        category: genre.value === '전체' ? '' : genre.value,
+        recommend: sort.value === '추천순' ? 1 : 0,
+      },
+      headers: { 'Cache-Control': 'no-cache' }
+    })
+    articles.value = response.data.articles
+    totalCount.value = response.data.total_count
+  } catch (error) {
+    console.error("뉴스 데이터를 불러오는 데 실패했습니다.", error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// 장르/정렬 변경 시 0페이지로 초기화 후 데이터 로드
+watch([genre, sort], () => {
+  currentPage.value = 0
+  loadArticles()
 })
+
+watch(currentPage, () => {
+  loadArticles()
+})
+
+onMounted(() => {
+  loadArticles()
+})
+
+function nextPage() {
+  if (currentPage.value < totalPages.value - 1) {
+    currentPage.value++
+  }
+}
+
+function prevPage() {
+  if (currentPage.value > 0) {
+    currentPage.value--
+  }
+}
 </script>
 
 <template>
@@ -33,13 +77,11 @@ onMounted(() => {
         <p class="text-gray-600 leading-relaxed text-sm sm:text-base">
           당신이 원하는 뉴스, 이제 AI가 직접 추천해드립니다!<br />
           나만의 취향을 기반으로, 맞춤형 뉴스만 쏙쏙 골라주는<br />
-          뉴스 큐레이팅 서비스 <strong class="font-semibold">SSAFYNEWS</strong>에 빠져보세요.<br />
-          AI 챗봇과 기사에 대해 대화하며 궁금한 점을 물어보고,<br />
-          한눈에 보기 쉬운 대시보드를 통해 나의 뉴스 소비 패턴도 확인할 수 있습니다.
+          뉴스 큐레이팅 서비스 <strong class="font-semibold">SSAFYNEWS</strong>에 빠져보세요.
         </p>
       </div>
 
-      <!-- 필터 + 뉴스박스 통합 카드 -->
+      <!-- 필터 + 뉴스박스 -->
       <div class="bg-white border rounded-xl shadow-sm p-6 space-y-6">
         <FilterBar
           :genres="genres"
@@ -48,7 +90,21 @@ onMounted(() => {
           v-model:sort="sort"
         />
 
-        <NewsBoard :articles="articles" />
+        <div v-if="isLoading" class="text-center text-gray-500 py-10">뉴스 불러오는 중...</div>
+        <NewsBoard v-else :articles="articles" />
+
+        <!-- 페이지네이션 -->
+        <div class="flex justify-center items-center gap-4 pt-4">
+          <button @click="prevPage" :disabled="currentPage === 0"
+                  class="px-3 py-1 border rounded disabled:opacity-40">
+            이전
+          </button>
+          <span class="text-sm text-gray-500">{{ currentPage + 1 }} / {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage >= totalPages - 1"
+                  class="px-3 py-1 border rounded disabled:opacity-40">
+            다음
+          </button>
+        </div>
       </div>
 
     </div>

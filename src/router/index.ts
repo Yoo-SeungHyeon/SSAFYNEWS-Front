@@ -11,7 +11,7 @@ const routes = [
   { path: '/dashboard', name: 'dashboard', component: DashboardView },
   { path: '/login', name: 'login', component: LoginView },
   { path: '/search', name: 'search', component: SearchView },
-    { path: '/detail/:id', name: 'detail', component: DetailView },
+  { path: '/detail/:id', name: 'detail', component: DetailView, props: true },
 
 ]
 
