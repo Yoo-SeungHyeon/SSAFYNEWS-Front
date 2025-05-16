@@ -38,7 +38,7 @@ async function fetchArticle() {
       : {}
 
     const res = await axios.get(
-      `http://localhost:8000/api/newsdetail/${props.articleId}/`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/newsdetail/${props.articleId}/`,
       { headers }
     )
 
@@ -65,7 +65,7 @@ async function toggleLike() {
 
   try {
     const res = await axios.post(
-      `http://localhost:8000/api/like/${article.value.id}/`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/like/${article.value.id}/`,
       {},
       {
         headers: {
@@ -80,6 +80,7 @@ async function toggleLike() {
   }
 }
 </script>
+
 
 
 <template>

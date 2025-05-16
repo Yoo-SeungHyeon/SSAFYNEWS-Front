@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<<script setup lang="ts">
 import { ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -59,7 +59,7 @@ const handleLogin = async () => {
     const result = await loginApi(loginUsername.value, loginPassword.value)
 
     // 로그인 후 유저 정보 가져오기
-    const userRes = await axios.get('http://localhost:8000/accounts/user/', {
+    const userRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/accounts/user/`, {
       headers: {
         Authorization: `Token ${result.key}`,
       },
@@ -100,8 +100,7 @@ const handleSignup = async () => {
       signupConfirm.value
     )
 
-    // 회원가입 후 로그인과 동일하게 유저 정보 요청
-    const userRes = await axios.get('http://localhost:8000/accounts/user/', {
+    const userRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/accounts/user/`, {
       headers: {
         Authorization: `Token ${result.key}`,
       },
@@ -123,4 +122,5 @@ const handleSignup = async () => {
   }
 }
 </script>
+
 

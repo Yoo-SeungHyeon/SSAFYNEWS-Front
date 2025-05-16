@@ -25,7 +25,7 @@ const authStore = useAuthStore()
 // 댓글 불러오기
 async function fetchComments() {
   try {
-    const res = await axios.get(`http://localhost:8000/api/comments/${props.articleId}/`)
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/comments/${props.articleId}/`)
     comments.value = res.data
   } catch (err) {
     console.error('댓글 불러오기 실패:', err)
@@ -39,7 +39,7 @@ async function addComment() {
 
   try {
     const res = await axios.post(
-      `http://localhost:8000/api/comments/${props.articleId}/`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/comments/${props.articleId}/`,
       { content },
       {
         headers: {
@@ -60,7 +60,7 @@ async function deleteComment(id: number) {
   if (!authStore.token) return
 
   try {
-    await axios.delete(`http://localhost:8000/api/comment/${id}/`, {
+    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/comment/${id}/`, {
       headers: {
         Authorization: `Token ${authStore.token}`,
       },
@@ -84,7 +84,7 @@ async function saveEdit(id: number) {
 
   try {
     const res = await axios.put(
-      `http://localhost:8000/api/comment/${id}/`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/comment/${id}/`,
       { content },
       {
         headers: {
@@ -101,11 +101,10 @@ async function saveEdit(id: number) {
   }
 }
 
-// ✅ 최초 진입
 onMounted(fetchComments)
-// ✅ detail/:id 변경될 때마다 다시 fetch
 watch(() => props.articleId, fetchComments)
 </script>
+
 
 <template>
   <div class="space-y-4">

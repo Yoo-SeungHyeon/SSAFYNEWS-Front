@@ -1,9 +1,9 @@
 // src/lib/auth.ts
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-// signup 함수에서 key 반환 처리
+// 회원가입
 export async function signup(username: string, email: string, password1: string, password2: string) {
   const res = await axios.post(`${API_BASE_URL}/accounts/signup/`, {
     username,
@@ -16,14 +16,14 @@ export async function signup(username: string, email: string, password1: string,
     throw new Error('회원가입 후 토큰을 받지 못했습니다.')
   }
 
-  return res.data  // { key: ... }
+  return res.data // { key: ... }
 }
 
-
+// 로그인
 export async function login(username: string, password: string) {
   const res = await axios.post(`${API_BASE_URL}/accounts/login/`, {
     username,
     password,
   })
-  return res.data  // { key: "..." }
+  return res.data // { key: "..." }
 }

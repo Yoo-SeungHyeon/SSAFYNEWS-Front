@@ -33,12 +33,15 @@ async function fetchDashboardData() {
   }
 
   try {
-    const res = await axios.get("http://localhost:8000/api/analyze/", {
-      headers: {
-        Authorization: `Token ${authStore.token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/api/analyze/`,
+      {
+        headers: {
+          Authorization: `Token ${authStore.token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     rawCategoryStats.value = res.data.user_category;
     keywordStats.value = res.data.user_keyword;
@@ -52,6 +55,7 @@ async function fetchDashboardData() {
 
 onMounted(fetchDashboardData);
 </script>
+
 
 <template>
   <div class="min-h-screen bg-muted">
@@ -88,12 +92,14 @@ onMounted(fetchDashboardData);
         </div>
 
         <!-- 주간 뷰 -->
-        <div class="bg-white border rounded-xl shadow-sm p-4">
+        <div class="bg-white border rounded-xl shadow-sm p-4"
+          style="min-height: 320px; height: 320px; overflow: hidden;">
           <h2 class="font-semibold text-gray-800 mb-2">📅 주간 읽은 기사</h2>
-          <div class="h-64 flex items-center justify-center text-gray-400">
+          <div class="h-full flex items-center justify-center text-gray-400">
             <WeeklyLineChart :data="weeklyStats" />
           </div>
         </div>
+
 
         <!-- 좋아요 기사 -->
         <div class="bg-white border rounded-xl shadow-sm p-4">

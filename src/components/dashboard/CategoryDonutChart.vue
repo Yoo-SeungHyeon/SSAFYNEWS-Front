@@ -6,9 +6,9 @@ import {
   Tooltip,
   ArcElement,
   DoughnutController,
-  Plugin,
 } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
+import type { Plugin } from 'chart.js'
 
 // Chart.js 요소 등록
 ChartJS.register(Title, Tooltip, ArcElement, DoughnutController)

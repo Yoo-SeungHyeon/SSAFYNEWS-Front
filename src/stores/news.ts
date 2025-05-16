@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 
 export interface Article {
   id: number
@@ -15,7 +16,6 @@ export const useNewsStore = defineStore('news', () => {
   const page = ref(1)
   const itemsPerPage = 10
 
-  // 필터링된 기사
   const filtered = computed(() => {
     let result = genre.value === '전체'
       ? allArticles.value
@@ -36,8 +36,13 @@ export const useNewsStore = defineStore('news', () => {
   )
 
   async function load() {
-    const res = await fetch('/src/assets/news-sample.json')
-    allArticles.value = await res.json()
+    try {
+      // ✅ 실제 API 호출 (page=0, category 전체, 추천순 off)
+      const res = await axios.get('/api/newspage/0/?category=&recommend=0')
+      allArticles.value = res.data.articles
+    } catch (err) {
+      console.error('뉴스 데이터를 불러오는 데 실패했습니다.', err)
+    }
   }
 
   return {

@@ -24,7 +24,7 @@ const totalPages = computed(() => Math.ceil(totalCount.value / pageSize))
 async function loadArticles() {
   isLoading.value = true
   try {
-    const response = await axios.get(`http://localhost:8000/api/newspage/${currentPage.value}/`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/newspage/${currentPage.value}/`, {
       params: {
         category: genre.value === '전체' ? '' : genre.value,
         recommend: sort.value === '추천순' ? 1 : 0,
@@ -40,7 +40,6 @@ async function loadArticles() {
   }
 }
 
-// 장르/정렬 변경 시 0페이지로 초기화 후 데이터 로드
 watch([genre, sort], () => {
   currentPage.value = 0
   loadArticles()
@@ -66,6 +65,7 @@ function prevPage() {
   }
 }
 </script>
+
 
 <template>
   <div class="min-h-screen bg-muted">

@@ -6,8 +6,13 @@ import CommentBox from '@/components/detail/CommentBox.vue'
 import SimilarArticleList from '@/components/detail/SimilarArticleList.vue'
 
 const route = useRoute()
-const articleId = route.params.id
+
+// ✅ 안전하게 string으로 변환
+const articleId = Array.isArray(route.params.id)
+  ? route.params.id[0]
+  : route.params.id
 </script>
+
 
 <template>
   <div class="min-h-screen bg-muted px-4 py-6">

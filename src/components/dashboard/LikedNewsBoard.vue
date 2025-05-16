@@ -25,7 +25,7 @@ async function fetchLikedArticles(page = 1) {
   if (!authStore.token) return
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/likes/?page=${page}`, {
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/likes/?page=${page}`, {
       headers: {
         Authorization: `Token ${authStore.token}`,
         'Content-Type': 'application/json',
@@ -50,11 +50,21 @@ function next() {
 onMounted(() => fetchLikedArticles())
 </script>
 
+
 <template>
   <div class="space-y-4">
     <ul class="space-y-2">
       <li v-for="item in articles" :key="item.news_id">
-        <ArticleCard :article="item" />
+        <!-- ✅ 안전하게 모든 필드를 보정하여 전달 -->
+        <ArticleCard :article="{
+          news_id: item.news_id,
+          title: item.title,
+          summary: item.summary ?? '',
+          author: item.author ?? '',
+          updated: item.updated ?? '',
+          category: item.category ?? '',
+          link: item.link ?? ''
+        }" />
       </li>
     </ul>
 

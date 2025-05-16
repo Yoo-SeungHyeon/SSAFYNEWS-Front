@@ -21,13 +21,14 @@ const articles = ref<Article[]>([])
 
 onMounted(async () => {
   try {
-    const res = await axios.get(`http://localhost:8000/api/newsdetail/${props.articleId}/similar/`)
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/newsdetail/${props.articleId}/similar/`)
     articles.value = res.data
   } catch (err) {
     console.error('관련 기사 불러오기 실패:', err)
   }
 })
 </script>
+
 
 <template>
   <div class="space-y-3">

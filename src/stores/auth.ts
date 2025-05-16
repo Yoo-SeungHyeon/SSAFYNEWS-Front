@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
       isLoggedIn.value = true
 
       try {
-        const res = await axios.get('http://localhost:8000/accounts/user/', {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/accounts/user/`, {
           headers: {
             Authorization: `Token ${saved}`,
           },

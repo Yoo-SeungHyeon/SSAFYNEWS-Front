@@ -7,7 +7,7 @@
       SSAFYNEWS
     </RouterLink>
 
-    <!-- 메뉴 + 검색창 + 로그인 -->
+    <!-- 메뉴 + 로그인 -->
     <nav class="flex items-center gap-4 w-full justify-end">
       <!-- 나만의 뉴스 -->
       <RouterLink to="/" class="text-sm font-medium hover:underline">
@@ -32,23 +32,13 @@
   </header>
 </template>
 
-
 <script setup lang="ts">
-import { ref } from "vue";
-import { RouterLink, useRouter } from "vue-router";
-import { Input } from "@/components/ui/input";
+import { useRouter, RouterLink } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
-const search = ref("");
 const authStore = useAuthStore();
-
-const onSearch = () => {
-  if (search.value.trim()) {
-    router.push({ path: "/search", query: { q: search.value } });
-  }
-};
 
 const onAuthClick = () => {
   if (authStore.isLoggedIn) {
