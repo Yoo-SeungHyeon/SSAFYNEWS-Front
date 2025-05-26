@@ -323,15 +323,15 @@ watch(messages, scrollToBottom, { deep: true })
       <div 
         v-if="!isOpen" 
         @click="toggleChatbot"
-        class="group fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-full shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        class="chatbot-button group fixed z-50 w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-full shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300 hover:scale-110 flex items-center justify-center"
       >
         <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-ping opacity-30"></div>
-        <svg class="w-7 h-7 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
         </svg>
         
-        <!-- 툴팁 -->
-        <div class="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+        <!-- 툴팁 (데스크톱에서만 표시) -->
+        <div class="hidden sm:block absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
           AI 어시스턴트
           <div class="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-gray-900"></div>
         </div>
@@ -342,27 +342,27 @@ watch(messages, scrollToBottom, { deep: true })
     <Transition name="slide-up">
       <div 
         v-if="isOpen" 
-        class="chatbot-large fixed bottom-6 right-6 z-50 bg-white/95 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+        class="chatbot-large fixed z-50 bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
       >
         <!-- 헤더 -->
-        <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-6 text-white">
+        <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-3 sm:p-6 text-white">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                 </svg>
               </div>
               <div>
-                <h3 class="font-bold text-lg">AI 어시스턴트</h3>
-                <p class="text-white/80 text-sm">스마트 뉴스 도우미</p>
+                <h3 class="font-bold text-base sm:text-lg">AI 어시스턴트</h3>
+                <p class="text-white/80 text-xs sm:text-sm">스마트 뉴스 도우미</p>
               </div>
             </div>
             <button 
               @click="toggleChatbot" 
-              class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors duration-200"
+              class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors duration-200"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
@@ -453,10 +453,85 @@ watch(messages, scrollToBottom, { deep: true })
 </template>
 
 <style scoped>
-/* 챗봇 크기 설정 */
+/* 플로팅 버튼 위치 */
+.chatbot-button {
+  bottom: 1rem !important;
+  right: 1rem !important;
+}
+
+/* 챗봇 반응형 크기 설정 */
 .chatbot-large {
-  width: 672px !important;
-  height: 864px !important;
+  /* 모바일 - 화면 비율에 맞춰 유연하게 조절 */
+  width: 90vw !important;
+  height: 80vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  min-width: 280px !important;
+  min-height: 400px !important;
+  /* 모바일에서는 중앙 정렬 */
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  /* 비율 유지 */
+  aspect-ratio: auto !important;
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 360px) {
+  .chatbot-large {
+    width: 95vw !important;
+    height: 85vh !important;
+    min-width: 250px !important;
+    min-height: 350px !important;
+  }
+}
+
+/* 태블릿 */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .chatbot-button {
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+  }
+  
+  .chatbot-large {
+    width: 80vw !important;
+    height: 85vh !important;
+    max-width: 540px !important;
+    max-height: 750px !important;
+    min-width: 400px !important;
+    min-height: 500px !important;
+    /* 태블릿에서는 우측 하단 위치로 변경 */
+    left: auto !important;
+    top: auto !important;
+    right: 1.5rem !important;
+    bottom: 1.5rem !important;
+    transform: none !important;
+  }
+}
+
+/* 데스크톱 - max 크기로 제한 */
+@media (min-width: 1024px) {
+  .chatbot-button {
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+  }
+  
+  .chatbot-large {
+    width: 60vw !important;
+    height: 80vh !important;
+    max-width: 605px !important;
+    max-height: 864px !important;
+    min-width: 500px !important;
+    min-height: 600px !important;
+    /* 데스크톱에서는 우측 하단 위치 유지 */
+    left: auto !important;
+    top: auto !important;
+    right: 1.5rem !important;
+    bottom: 1.5rem !important;
+    transform: none !important;
+  }
 }
 
 /* 트랜지션 애니메이션 */

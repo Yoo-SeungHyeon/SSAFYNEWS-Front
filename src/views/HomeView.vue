@@ -72,7 +72,7 @@ function prevPage() {
     <div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
       <!-- 소개 박스 -->
-      <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl shadow-2xl p-8 text-white">
+      <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-3xl shadow-2xl p-8 text-white">
         <div class="absolute inset-0 bg-black/10"></div>
         <div class="relative z-10 space-y-6">
           <div class="flex items-center gap-4">
@@ -139,7 +139,7 @@ function prevPage() {
             <button 
               @click="prevPage" 
               :disabled="currentPage === 0"
-              class="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 hover:shadow-md transition-all duration-200 transform hover:scale-105"
+              class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 hover:shadow-md transition-all duration-200 transform hover:scale-105"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -158,7 +158,7 @@ function prevPage() {
             <button 
               @click="nextPage" 
               :disabled="currentPage >= totalPages - 1"
-              class="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 hover:shadow-md transition-all duration-200 transform hover:scale-105"
+              class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 hover:shadow-md transition-all duration-200 transform hover:scale-105"
             >
               다음
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

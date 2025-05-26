@@ -50,23 +50,23 @@ const getCategoryColor = (category: string) => {
 
 <template>
   <div
-    class="group relative bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:border-blue-200 overflow-hidden"
+    class="group relative bg-white border border-gray-100 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] hover:border-blue-200 overflow-hidden"
     @click="goToDetail"
   >
     <!-- 배경 그라디언트 효과 -->
     <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     
-    <div class="relative p-6 space-y-4">
+    <div class="relative p-responsive space-y-3 sm:space-y-4">
       <!-- 헤더 -->
-      <div class="flex items-center justify-between">
-        <div :class="`inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r ${getCategoryColor(article.category)} rounded-full shadow-sm`">
-          <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+        <div :class="`inline-flex items-center px-2 py-1 sm:px-3 sm:py-1.5 text-xs font-semibold text-white bg-gradient-to-r ${getCategoryColor(article.category)} rounded-full shadow-sm w-fit`">
+          <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
           </svg>
           {{ article.category }}
         </div>
-        <div class="flex items-center text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
-          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-center text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg w-fit">
+          <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
           {{ new Date(article.updated).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }) }}
@@ -74,26 +74,26 @@ const getCategoryColor = (category: string) => {
       </div>
 
       <!-- 제목 -->
-      <h2 class="font-bold text-gray-900 line-clamp-2 text-lg leading-tight group-hover:text-blue-600 transition-colors duration-200">
+      <h2 class="font-bold text-gray-900 line-clamp-2 text-responsive-base leading-tight group-hover:text-blue-600 transition-colors duration-200">
         {{ article.title }}
       </h2>
 
       <!-- 요약 -->
-      <p class="text-gray-600 line-clamp-3 text-sm leading-relaxed">
+      <p class="text-gray-600 line-clamp-3 text-responsive-xs leading-relaxed">
         {{ article.summary }}
       </p>
 
       <!-- 푸터 -->
-      <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 pt-3 sm:pt-4 border-t border-gray-100">
         <div class="flex items-center text-xs text-gray-500">
-          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
           {{ article.author }}
         </div>
         <div class="flex items-center text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           자세히 보기
-          <svg class="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
         </div>
