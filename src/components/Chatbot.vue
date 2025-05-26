@@ -164,6 +164,7 @@ async function getNewsDetailContext() {
         category: article.category,
         summary: article.summary,
         content: article.content,
+        full_text: article.full_text || article.content,
         author: article.author,
         updated: article.updated,
         keywords: article.keywords,
@@ -341,7 +342,7 @@ watch(messages, scrollToBottom, { deep: true })
     <Transition name="slide-up">
       <div 
         v-if="isOpen" 
-        class="fixed bottom-6 right-6 z-50 w-96 h-[32rem] bg-white/95 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+        class="chatbot-large fixed bottom-6 right-6 z-50 bg-white/95 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
       >
         <!-- 헤더 -->
         <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 p-6 text-white">
@@ -398,11 +399,12 @@ watch(messages, scrollToBottom, { deep: true })
           >
             <div
               :class="[
-                'max-w-[80%] px-4 py-3 rounded-2xl',
+                'px-4 py-3 rounded-2xl',
                 message.sender === 'user'
                   ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                   : 'bg-gray-100 text-gray-800'
               ]"
+              style="max-width: 85%;"
             >
               <p class="text-sm leading-relaxed whitespace-pre-line">{{ message.text }}</p>
               <div class="mt-2 text-xs opacity-70">
@@ -451,6 +453,12 @@ watch(messages, scrollToBottom, { deep: true })
 </template>
 
 <style scoped>
+/* 챗봇 크기 설정 */
+.chatbot-large {
+  width: 672px !important;
+  height: 864px !important;
+}
+
 /* 트랜지션 애니메이션 */
 .bounce-enter-active {
   animation: bounce-in 0.5s;
@@ -508,4 +516,4 @@ watch(messages, scrollToBottom, { deep: true })
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
 }
-</style>
+</style> 
