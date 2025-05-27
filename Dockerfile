@@ -17,8 +17,6 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Nginx 설정 파일 필요 시 추가
-# COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
